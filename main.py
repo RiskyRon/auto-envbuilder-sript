@@ -56,20 +56,31 @@ def create_virtual_env(venv_name, python_version):
     return venv_name
 
 def install_packages(venv_name, packages):
+    # Always install python-dotenv and pylint by default
+    packages.extend(['python-dotenv', 'pylint'])
     for package in packages:
         subprocess.call([f"{venv_name}/bin/pip", 'install', package])
 
+
 def create_vscode_settings(venv_name):
     settings = {
-        "python.pythonPath": f"{venv_name}/bin/python"
+        "python.pythonPath": f"{venv_name}/bin/python",
+        "python.linting.enabled": True,
+        "python.linting.pylintEnabled": True,
+        "python.formatting.provider": "autopep8",
+        "python.testing.pytestEnabled": True,
+        "python.testing.unittestEnabled": False,
+        "python.autoComplete.addBrackets": True,
+        "python.jediEnabled": False
     }
     os.makedirs(".vscode", exist_ok=True)
     with open(".vscode/settings.json", "w") as f:
         json.dump(settings, f, indent=4)
 
+
 def create_docker_files():
     with open("Dockerfile", "w") as f:
-        f.write("FROM python:3.8\n")
+        f.write("FROM python:3.11.3\n")
         f.write("WORKDIR /app\n")
         f.write("COPY requirements.txt .\n")
         f.write("RUN pip install -r requirements.txt\n")
@@ -147,6 +158,10 @@ def initialize_git_repo():
     subprocess.call(['git', 'add', '.'])
     subprocess.call(['git', 'commit', '-m', 'Initial commit'])
 
+def freeze_packages(venv_name):
+    with open("requirements.txt", "w") as f:
+        subprocess.call([f"{venv_name}/bin/pip", 'freeze'], stdout=f)
+
 def print_activate_virtual_env_command(venv_name,dir_name):
     print("\n\n" + "#" * 30)
     print(f"To activate the virtual environment, run:")
@@ -180,4 +195,5 @@ if __name__ == "__main__":
     setup_pytest()
     create_docker_files()
     initialize_git_repo()
+    freeze_packages(venv_name)
     print_activate_virtual_env_command(venv_name,args.dir)
