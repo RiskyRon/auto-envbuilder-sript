@@ -168,6 +168,9 @@ def print_activate_virtual_env_command(venv_name,dir_name):
     print(f"source {dir_name}/{venv_name}/bin/activate")
     print("#" * 30 + "\n\n")
 
+def run_tree(venv_name):
+    subprocess.call(['tree', '-I', f'{venv_name}|.DS_Store'])
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create a Python project")
     parser.add_argument("--dir", help="Directory name", default="my_project")
@@ -196,4 +199,5 @@ if __name__ == "__main__":
     create_docker_files()
     initialize_git_repo()
     freeze_packages(venv_name)
+    run_tree(venv_name)
     print_activate_virtual_env_command(venv_name,args.dir)
