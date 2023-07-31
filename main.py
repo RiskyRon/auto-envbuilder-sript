@@ -123,28 +123,28 @@ def create_docker_files():
     with open("config/Dockerfile", "w") as f:
         f.write("FROM python:3.11.3\n")
         f.write("WORKDIR /app\n")
-        f.write("COPY config/requirements.txt .\n")
+        f.write("COPY requirements.txt .\n")
         f.write("RUN pip install -r requirements.txt\n")
         f.write("COPY . .\n")
-        f.write('CMD ["python", "example.py"]')
+        f.write('CMD ["tail", "-f", "/dev/null"]\n')
+
 
 def create_docker_compose_file():
     content = """
-    version: '3'
-    services:
-      web:
-        build: ./config
-        command: python app.py
-        volumes:
-          - .:/code
-          - ./WORKSPACE:/workspace
-          - ./config/RONTESTING:/rontesting
-        ports:
-          - "8000:8000"
+version: '3.9'
+services:
+  web:
+    build: ./
+    volumes:
+      - ../app:/app
+      - .:/config/
+      - ../WORKSPACE:/workspace
+      - ./config/RONTESTING:/rontesting
+    ports:
+      - "8000:8000"
     """
     with open("config/docker-compose.yml", "w") as f:
         f.write(content.strip())
-
 
 def create_vscode_settings(venv_name):
     settings = {
