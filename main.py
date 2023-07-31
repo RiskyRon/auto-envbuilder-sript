@@ -48,7 +48,7 @@ def create_virtual_env(venv_name, python_version):
 
 def install_packages(venv_name, packages):
     # Always install python-dotenv and pylint by default
-    packages.extend(['python-dotenv', 'pylint'])
+    packages.extend(['python-dotenv', 'pylint', 'openai'])
     for package in packages:
         subprocess.call([f"{venv_name}/bin/pip", 'install', package])
 
@@ -66,6 +66,15 @@ def setup_pytest():
     with open("config/tests/test_initial.py", "w") as f:
         f.write("""def test_initial():\n    assert True""")
 
+def create_pytest_ini():
+    content = """
+    [pytest]
+    python_files = tests.py test_*.py *_tests.py
+    """
+    with open("pytest.ini", "w") as f:
+        f.write(content.strip())
+
+
 def create_sqlite_db(db_name):
     conn = sqlite3.connect(f"config/{db_name}")
     logging.info(f"Created SQLite database {db_name}")
@@ -77,6 +86,38 @@ def create_readme(python_version, dir_name):
         f.write(f"This project uses Python version {python_version}.\n")
         f.write("Further project details will be added here.")
 
+def create_openai_script():
+    content = '''
+import openai
+from dotenv import load_dotenv
+import os
+
+# Load .env file
+load_dotenv("../config/.env")
+
+# Get API Key from .env
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Set OpenAI API Key
+openai.api_key = OPENAI_API_KEY
+
+# Prepare messages
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Translate the following English text to French: 'Hello, how are you?'"}
+]
+
+# Generate response
+response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=messages,
+    max_tokens=60
+)
+
+print(response['choices'][0]['message']['content'])
+'''
+    with open("app/openai_script.py", "w") as f:
+        f.write(content.strip())
 
 def create_docker_files():
     with open("config/Dockerfile", "w") as f:
@@ -206,7 +247,9 @@ if __name__ == "__main__":
     create_sqlite_db('database.sqlite3')
     create_ron_testing_dir()
     create_workspace_dir()
+    create_pytest_ini()
     create_readme(args.python,args.dir)
+    create_openai_script()
     create_env_file()
     create_gitignore_file(args.venv)
     packages = args.packages.split(',') if args.packages else []
