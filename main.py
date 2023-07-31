@@ -80,11 +80,41 @@ def create_sqlite_db(db_name):
     logging.info(f"Created SQLite database {db_name}")
     conn.close()
 
-def create_readme(python_version, dir_name):
+def create_readme(dir_name):
     with open("config/README.md", "w") as f:
-        f.write(f"# {dir_name}\n")
-        f.write(f"This project uses Python version {python_version}.\n")
-        f.write("Further project details will be added here.")
+        f.write(f"# {dir_name} Python Project Builder\n")
+        f.write("\n## Introduction\n")
+        f.write("This script automates the process of setting up a new Python project with a dedicated virtual environment, a SQLite database, and a Docker environment. The script offers several configurable options:\n")
+        f.write("- `--dir`: The directory name for the new project. Default is 'project'.\n")
+        f.write("- `--venv`: The name of the Python virtual environment to create. Default is 'venv'.\n")
+        f.write("- `--packages`: A comma-separated list of Python packages to install in the virtual environment. Default is an empty list.\n")
+        f.write("- `--python`: The version of Python to use in the virtual environment. Default is '3.11.3'.\n")
+        f.write("\n## Example Usage\n")
+        f.write("To create a new project with the directory name 'my_cool_project', a virtual environment named 'my_env', and the packages 'numpy', 'pandas', and 'matplotlib' installed, using Python version 3.11.3, you would run the following command:\n")
+        f.write("```python3 main.py --dir my_cool_project --venv my_env --packages numpy,pandas,matplotlib --python 3.11.3```\n")
+        f.write("\n## Docker Commands\n")
+        f.write("Here are some Docker commands you might find useful:\n")
+        f.write("### Build Docker Image\n")
+        f.write("```docker-compose build```\n")
+        f.write("### Start Docker Containers\n")
+        f.write("```docker-compose up -d```\n")
+        f.write("### Stop Docker Containers\n")
+        f.write("```docker-compose down```\n")
+        f.write("### List Docker Containers\n")
+        f.write("```docker ps -a```\n")
+        f.write("### Execute a Command Inside a Docker Container\n")
+        f.write("```docker exec -it <container-id> <command>```\n")
+        f.write("Replace `<container-id>` with the ID of your Docker container, and `<command>` with the command you want to execute.\n")
+        f.write("For example, to run a Python script named 'openai_script.py' located in the '/app' directory inside the Docker container, you would use the following command:\n")
+        f.write("```docker exec -it <container-id> python /app/openai_script.py```\n")
+        f.write("\n## Project Structure\n")
+        f.write("The script creates the following project structure:\n")
+        f.write("```\nproject/\n│   ├── app/\n│   ├── config/\n│   │   ├── .env\n│   │   ├── .gitignore\n│   │   ├── .vscode/\n│   │   ├── Dockerfile\n│   │   ├── README.md\n│   │   ├── RONTESTING/\n│   │   ├── database.sqlite3\n│   │   ├── docker-compose.yml\n│   │   ├── openai_script.py\n│   │   ├── requirements.txt\n│   │   ├── tests/\n│   │   └── venv/\n│   └── WORKSPACE/\n```\n")
+        f.write("\n## Activating the Virtual Environment\n")
+        f.write("After running the script, you can activate the virtual environment and start the Docker containers using the following command:\n")
+        f.write("```source <project-dir>/<venv>/bin/activate && cd <project-dir>/config/ && docker-compose up -d```\n")
+        f.write("Replace `<project-dir>` with the name of your project directory, and `<venv>` with the name of your virtual environment.\n")
+
 
 def print_example_usage():
     print("\n\n" + "#" * 118)
@@ -226,7 +256,7 @@ def freeze_packages(venv_name):
 def print_activate_virtual_env_command(venv_name,dir_name):
     print("\n" + "#" * 92)
     print(f"To activate the virtual environment, run:")
-    print(f"source {dir_name}/{venv_name}/bin/activate && cd project/config/ && docker-compose up -d")
+    print(f"source {dir_name}/{venv_name}/bin/activate && cd {dir_name}/config/ && docker-compose up -d")
     print("#" * 92 + "\n")
 
 def run_tree(venv_name):
@@ -254,7 +284,7 @@ if __name__ == "__main__":
     create_ron_testing_dir()
     create_workspace_dir()
     create_pytest_ini()
-    create_readme(args.python,args.dir)
+    create_readme(args.dir)
     create_openai_script()
     create_env_file()
     create_gitignore_file(args.venv)

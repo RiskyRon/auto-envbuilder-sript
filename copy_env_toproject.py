@@ -4,7 +4,7 @@ import shutil
 source = ".env"
 
 # Destination path
-destination = "project/config/.env"
+destination = "dockertesting/config/.env"
 
 # Copy the content of source to destination
 shutil.copy2(source, destination)
