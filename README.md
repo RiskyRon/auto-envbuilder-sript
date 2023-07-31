@@ -8,8 +8,8 @@ This script automates the process of setting up a new Python project with a dedi
 - `--python`: The version of Python to use in the virtual environment. Default is '3.11.3'.
 
 ## Example Usage
-To create a new project with the directory name 'my_cool_project', a virtual environment named 'my_env', and the packages 'numpy', 'pandas', and 'matplotlib' installed, using Python version 3.11.3, you would run the following command:
-```python3 main.py --dir my_cool_project --venv my_env --packages numpy,pandas,matplotlib --python 3.11.3```
+To create a new project with the directory name 'my_project', a virtual environment named 'my_env', and the packages 'numpy', 'pandas', and 'matplotlib' installed, using Python version 3.11.3, you would run the following command:
+```python3 pybuild.py --dir my_project --venv my_env --packages numpy,pandas,matplotlib --python 3.11.3```
 
 ## Docker Commands
 Here are some Docker commands you might find useful:
