@@ -1,7 +1,5 @@
 # auto-envbuilder-sript
 
-# GPT-BuildBox Python Project Builder
-
 ## Introduction
 This script automates the process of setting up a new Python project with a dedicated virtual environment, a SQLite database, and a Docker environment. The script offers several configurable options:
 - `--dir`: The directory name for the new project. Default is 'project'.
