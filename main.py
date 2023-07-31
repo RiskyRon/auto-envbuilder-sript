@@ -86,6 +86,12 @@ def create_readme(python_version, dir_name):
         f.write(f"This project uses Python version {python_version}.\n")
         f.write("Further project details will be added here.")
 
+def print_example_usage():
+    print("\n\n" + "#" * 118)
+    print("Example usage: python3 main.py --dir my_cool_project --venv my_env --packages numpy,pandas,matplotlib --python 3.11.3")
+    print("#" * 118 + "\n\n")
+
+
 def create_openai_script():
     content = '''
 import openai
@@ -145,7 +151,6 @@ services:
     """
     with open("config/docker-compose.yml", "w") as f:
         f.write(content.strip())
-
 
 def create_vscode_settings(venv_name):
     settings = {
@@ -219,10 +224,10 @@ def freeze_packages(venv_name):
         subprocess.call([f"{venv_name}/bin/pip", 'freeze'], stdout=f)
 
 def print_activate_virtual_env_command(venv_name,dir_name):
-    print("\n\n" + "#" * 30)
+    print("\n" + "#" * 92)
     print(f"To activate the virtual environment, run:")
     print(f"source {dir_name}/{venv_name}/bin/activate && cd project/config/ && docker-compose up -d")
-    print("#" * 45 + "\n\n")
+    print("#" * 92 + "\n")
 
 def run_tree(venv_name):
     subprocess.call(['tree', '-I', f'{venv_name}|.DS_Store'])
@@ -263,3 +268,4 @@ if __name__ == "__main__":
     freeze_packages(venv_name)
     run_tree(args.venv)
     print_activate_virtual_env_command(venv_name,args.dir)
+    print_example_usage()
