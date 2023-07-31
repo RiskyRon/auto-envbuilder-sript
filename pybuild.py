@@ -117,9 +117,9 @@ def create_readme(dir_name):
 
 
 def print_example_usage():
-    print("\n\n" + "#" * 118)
-    print("Example usage: python3 main.py --dir my_cool_project --venv my_env --packages numpy,pandas,matplotlib --python 3.11.3")
-    print("#" * 118 + "\n\n")
+    print("\n" + "#" * 118 + "\n")
+    print("Example usage: python3 main.py --dir my_cool_project --venv my_env --packages numpy,pandas,matplotlib --python 3.11.3\n")
+    print("#" * 118 + "\n")
 
 
 def create_openai_script():
@@ -254,10 +254,10 @@ def freeze_packages(venv_name):
         subprocess.call([f"{venv_name}/bin/pip", 'freeze'], stdout=f)
 
 def print_activate_virtual_env_command(venv_name,dir_name):
-    print("\n" + "#" * 92)
+    print("\n" + "#" * 118 + "\n")
     print(f"To activate the virtual environment, run:")
-    print(f"source {dir_name}/{venv_name}/bin/activate && cd {dir_name}/config/ && docker-compose up -d")
-    print("#" * 92 + "\n")
+    print(f"source {dir_name}/{venv_name}/bin/activate && cd {dir_name}/config/ && docker-compose up -d\n")
+    print("#" * 118 + "\n")
 
 def run_tree(venv_name):
     subprocess.call(['tree', '-I', f'{venv_name}|.DS_Store'])
