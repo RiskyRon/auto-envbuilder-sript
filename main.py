@@ -129,11 +129,11 @@ def create_docker_files():
         f.write('CMD ["tail", "-f", "/dev/null"]\n')
 
 
-def create_docker_compose_file():
-    content = """
+def create_docker_compose_file(dir_name):
+    content = f"""
 version: '3.9'
 services:
-  web:
+  {dir_name}:
     build: ./
     volumes:
       - ../app:/app
@@ -145,6 +145,7 @@ services:
     """
     with open("config/docker-compose.yml", "w") as f:
         f.write(content.strip())
+
 
 def create_vscode_settings(venv_name):
     settings = {
@@ -220,8 +221,8 @@ def freeze_packages(venv_name):
 def print_activate_virtual_env_command(venv_name,dir_name):
     print("\n\n" + "#" * 30)
     print(f"To activate the virtual environment, run:")
-    print(f"source {dir_name}/{venv_name}/bin/activate")
-    print("#" * 30 + "\n\n")
+    print(f"source {dir_name}/{venv_name}/bin/activate && cd project/config/ && docker-compose up -d")
+    print("#" * 45 + "\n\n")
 
 def run_tree(venv_name):
     subprocess.call(['tree', '-I', f'{venv_name}|.DS_Store'])
@@ -257,7 +258,7 @@ if __name__ == "__main__":
     create_vscode_settings(venv_name)
     setup_pytest()
     create_docker_files()
-    create_docker_compose_file()
+    create_docker_compose_file(args.dir)
     initialize_git_repo()
     freeze_packages(venv_name)
     run_tree(args.venv)
